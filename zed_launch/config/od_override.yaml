@@ -1,0 +1,9 @@
+/**:
+  ros__parameters:
+    object_detection:
+      od_enabled: true
+      enable_tracking: true
+      detection_model: 'MULTI_CLASS_BOX_FAST'  # Options: MULTI_CLASS_BOX_FAST, MULTI_CLASS_BOX_MEDIUM, MULTI_CLASS_BOX_ACCURATE
+      max_range: 20.0
+      filtering_mode: 'NMS3D'
+      prediction_timeout: 2.0

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch arguments -->
+  <arg name="node_name" default="autoware_zed_converter" description="Name of the converter node"/>
+  <arg name="input_topic" default="/zed/zed_node/obj_det/objects" description="Input topic with ZED objects"/>
+  <arg name="output_topic" default="/perception/object_recognition/objects" description="Output topic for Autoware objects"/>
+  <arg name="use_sim_time" default="false" description="Use simulation clock"/>
+  <arg name="use_tracking_velocity" default="true" description="Use tracking velocity from ZED"/>
+  <arg name="existence_probability_threshold" default="0.5" description="Minimum existence probability threshold"/>
+  
+  <!-- Configuration file path -->
+  <let name="config_file" value="$(find-pkg-share autoware_zed_converter)/config/autoware_zed_converter.yaml"/>
+  
+  <!-- Converter node -->
+  <node pkg="autoware_zed_converter" exec="autoware_zed_converter_node" name="$(var node_name)" output="screen">
+    <param from="$(var config_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="input_topic" value="$(var input_topic)"/>
+    <param name="output_topic" value="$(var output_topic)"/>
+    <param name="use_tracking_velocity" value="$(var use_tracking_velocity)"/>
+    <param name="existence_probability_threshold" value="$(var existence_probability_threshold)"/>
+  </node>
+</launch>

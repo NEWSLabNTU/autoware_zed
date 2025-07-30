@@ -1,0 +1,15 @@
+<launch>
+  <!-- Launch arguments -->
+  <arg name="cam_names" default="[zed_front,zed_back]" description="List of camera names"/>
+  <arg name="cam_models" default="[zedxm,zedxm]" description="List of camera models"/>
+  <arg name="cam_serials" default="[59072113,50499972]" description="List of camera serial numbers"/>
+  
+  <!-- Include multi-camera launch with object detection configuration -->
+  <include file="$(find-pkg-share zed_multi_camera)/launch/zed_multi_camera.launch.py">
+    <arg name="cam_names" value="$(var cam_names)"/>
+    <arg name="cam_models" value="$(var cam_models)"/>
+    <arg name="cam_serials" value="$(var cam_serials)"/>
+    <!-- Note: For object detection parameters, we'll need to pass them through the launch or use a config file -->
+    <arg name="ros_params_override_path" value="$(find-pkg-share zed_launch)/config/od_override.yaml"/>
+  </include>
+</launch>

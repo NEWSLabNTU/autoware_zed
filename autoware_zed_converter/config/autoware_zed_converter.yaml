@@ -6,9 +6,6 @@
     # Output topic for Autoware
     output_topic: "/perception/object_recognition/objects"
     
-    # Target frame for transformed objects
-    target_frame: "base_link"
-    
     # Use tracking velocity from ZED if available
     use_tracking_velocity: true
     

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(autoware_zed)
+project(autoware_zed_converter)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -13,60 +13,54 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(zed_msgs REQUIRED)
 find_package(autoware_perception_msgs REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
 
 # Include directories
 include_directories(include)
 
 # Create library
-add_library(autoware_zed_component SHARED
+add_library(autoware_zed_converter_component SHARED
   src/autoware_zed_node.cpp
 )
 
-target_compile_features(autoware_zed_component PUBLIC c_std_99 cxx_std_17)
+target_compile_features(autoware_zed_converter_component PUBLIC c_std_99 cxx_std_17)
 
-ament_target_dependencies(autoware_zed_component
+ament_target_dependencies(autoware_zed_converter_component
   rclcpp
   rclcpp_components
   std_msgs
   geometry_msgs
   zed_msgs
   autoware_perception_msgs
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
 )
 
 # Register component
-rclcpp_components_register_nodes(autoware_zed_component
-  "autoware_zed::AutowareZedNode"
+rclcpp_components_register_nodes(autoware_zed_converter_component
+  "autoware_zed_converter::AutowareZedConverterNode"
 )
 
 # Create executable
-add_executable(autoware_zed_node
+add_executable(autoware_zed_converter_node
   src/autoware_zed_main.cpp
 )
 
-target_link_libraries(autoware_zed_node
-  autoware_zed_component
+target_link_libraries(autoware_zed_converter_node
+  autoware_zed_converter_component
 )
 
-ament_target_dependencies(autoware_zed_node
+ament_target_dependencies(autoware_zed_converter_node
   rclcpp
 )
 
 # Install
 install(TARGETS
-  autoware_zed_component
+  autoware_zed_converter_component
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
 
 install(TARGETS
-  autoware_zed_node
+  autoware_zed_converter_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -87,7 +81,7 @@ if(BUILD_TESTING)
 endif()
 
 ament_export_include_directories(include)
-ament_export_libraries(autoware_zed_component)
+ament_export_libraries(autoware_zed_converter_component)
 ament_export_dependencies(
   rclcpp
   rclcpp_components
@@ -95,9 +89,6 @@ ament_export_dependencies(
   geometry_msgs
   zed_msgs
   autoware_perception_msgs
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
 )
 
 ament_package()

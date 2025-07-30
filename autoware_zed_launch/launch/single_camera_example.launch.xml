@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch arguments -->
+  <arg name="camera_name" default="zed" description="Camera name"/>
+  <arg name="camera_model" default="zedxm" description="Camera model (zed, zedm, zed2, zed2i, zedx, zedxm)"/>
+  <arg name="camera_serial" default="0" description="Camera serial number (0 for auto-detect)"/>
+  <arg name="converter_output_topic" default="/perception/object_recognition/objects" description="Output topic for Autoware objects"/>
+  <arg name="use_sim_time" default="false" description="Use simulation clock"/>
+  
+  <!-- Launch ZED camera -->
+  <include file="$(find-pkg-share zed_launch)/launch/single_camera.launch.xml">
+    <arg name="camera_name" value="$(var camera_name)"/>
+    <arg name="camera_model" value="$(var camera_model)"/>
+    <arg name="camera_serial" value="$(var camera_serial)"/>
+    <arg name="enable_object_detection" value="true"/>
+  </include>
+  
+  <!-- Launch converter node -->
+  <include file="$(find-pkg-share autoware_zed_converter)/launch/converter_node.launch.xml">
+    <arg name="node_name" value="$(var camera_name)_converter"/>
+    <arg name="input_topic" value="/$(var camera_name)/$(var camera_name)_node/obj_det/objects"/>
+    <arg name="output_topic" value="$(var converter_output_topic)"/>
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+  </include>
+</launch>

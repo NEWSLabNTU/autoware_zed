@@ -1,26 +1,22 @@
-#include "autoware_zed/autoware_zed_node.hpp"
-#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
-#include <tf2/exceptions.h>
+#include "autoware_zed_converter/autoware_zed_converter_node.hpp"
 #include <cmath>
 #include <algorithm>
 
-namespace autoware_zed
+namespace autoware_zed_converter
 {
 
-AutowareZedNode::AutowareZedNode(const rclcpp::NodeOptions & options)
-: Node("autoware_zed_node", options)
+AutowareZedConverterNode::AutowareZedConverterNode(const rclcpp::NodeOptions & options)
+: Node("autoware_zed_converter_node", options)
 {
   // Declare parameters
   this->declare_parameter("input_topic", "/zed/zed_node/obj_det/objects");
   this->declare_parameter("output_topic", "/perception/object_recognition/objects");
-  this->declare_parameter("target_frame", "base_link");
   this->declare_parameter("use_tracking_velocity", true);
   this->declare_parameter("existence_probability_threshold", 0.5);
 
   // Get parameters
   input_topic_ = this->get_parameter("input_topic").as_string();
   output_topic_ = this->get_parameter("output_topic").as_string();
-  target_frame_ = this->get_parameter("target_frame").as_string();
   use_tracking_velocity_ = this->get_parameter("use_tracking_velocity").as_bool();
   existence_probability_threshold_ = this->get_parameter("existence_probability_threshold").as_double();
 
@@ -45,28 +41,23 @@ AutowareZedNode::AutowareZedNode(const rclcpp::NodeOptions & options)
     {"motorcycle", autoware_perception_msgs::msg::ObjectClassification::MOTORCYCLE}
   };
 
-  // Initialize TF2
-  tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
-  tf_listener_ = std::make_unique<tf2_ros::TransformListener>(*tf_buffer_);
-
   // Create subscriber
   zed_objects_sub_ = this->create_subscription<zed_msgs::msg::ObjectsStamped>(
     input_topic_, 10,
-    std::bind(&AutowareZedNode::objectsCallback, this, std::placeholders::_1));
+    std::bind(&AutowareZedConverterNode::objectsCallback, this, std::placeholders::_1));
 
   // Create publisher
   autoware_objects_pub_ = this->create_publisher<autoware_perception_msgs::msg::DetectedObjects>(
     output_topic_, 10);
 
   RCLCPP_INFO(this->get_logger(), 
-    "ZED to Autoware Transformer initialized:\n"
+    "ZED to Autoware Converter initialized:\n"
     "  Input topic: %s\n"
-    "  Output topic: %s\n"
-    "  Target frame: %s",
-    input_topic_.c_str(), output_topic_.c_str(), target_frame_.c_str());
+    "  Output topic: %s",
+    input_topic_.c_str(), output_topic_.c_str());
 }
 
-void AutowareZedNode::objectsCallback(const zed_msgs::msg::ObjectsStamped::SharedPtr msg)
+void AutowareZedConverterNode::objectsCallback(const zed_msgs::msg::ObjectsStamped::SharedPtr msg)
 {
   // Create output message
   autoware_perception_msgs::msg::DetectedObjects autoware_msg;
@@ -101,7 +92,7 @@ void AutowareZedNode::objectsCallback(const zed_msgs::msg::ObjectsStamped::Share
 }
 
 autoware_perception_msgs::msg::ObjectClassification::_label_type 
-AutowareZedNode::mapZedLabelToAutoware(const std::string & zed_label) const
+AutowareZedConverterNode::mapZedLabelToAutoware(const std::string & zed_label) const
 {
   auto it = label_map_.find(zed_label);
   if (it != label_map_.end()) {
@@ -115,7 +106,7 @@ AutowareZedNode::mapZedLabelToAutoware(const std::string & zed_label) const
 }
 
 autoware_perception_msgs::msg::DetectedObject 
-AutowareZedNode::convertZedObjectToAutoware(const zed_msgs::msg::Object & zed_obj) const
+AutowareZedConverterNode::convertZedObjectToAutoware(const zed_msgs::msg::Object & zed_obj) const
 {
   autoware_perception_msgs::msg::DetectedObject autoware_obj;
 
@@ -199,12 +190,12 @@ AutowareZedNode::convertZedObjectToAutoware(const zed_msgs::msg::Object & zed_ob
   return autoware_obj;
 }
 
-bool AutowareZedNode::isValidNumber(float value) const
+bool AutowareZedConverterNode::isValidNumber(float value) const
 {
   return std::isfinite(value);
 }
 
-} // namespace autoware_zed
+} // namespace autoware_zed_converter
 
 #include "rclcpp_components/register_node_macro.hpp"
-RCLCPP_COMPONENTS_REGISTER_NODE(autoware_zed::AutowareZedNode)
+RCLCPP_COMPONENTS_REGISTER_NODE(autoware_zed_converter::AutowareZedConverterNode)

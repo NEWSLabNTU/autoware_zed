@@ -1,0 +1,12 @@
+<launch>
+  <!-- Launch arguments -->
+  <arg name="camera_name" default="zed" description="Camera name"/>
+  <arg name="camera_model" default="zedxm" description="Camera model (zed, zedm, zed2, zed2i, zedx, zedxm)"/>
+  
+  <!-- Include ZED camera launch with object detection -->
+  <include file="$(find-pkg-share zed_launch)/launch/single_camera_od.launch.py">
+    <arg name="camera_model" value="$(var camera_model)"/>
+    <arg name="camera_name" value="$(var camera_name)"/>
+    <arg name="enable_od_service" value="true"/>
+  </include>
+</launch>

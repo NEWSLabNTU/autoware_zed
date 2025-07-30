@@ -67,36 +67,42 @@ source install/setup.bash
 - **Velocity**: Used if tracking is available and enabled
 - **Bounding Box**: ZED 3D dimensions mapped to Autoware shape
 - **Confidence**: ZED confidence (0-100) converted to probability (0.0-1.0)
-- **Frame ID**: Preserved from input message
+- **Frame ID**: Preserved from input message (no transformation applied)
 
 ## Usage
 
-### Single Camera
+### Launch File (converter_node.launch.xml)
+The package includes a launch file for starting the converter node with configurable parameters:
+
 ```bash
-ros2 launch autoware_zed single_camera.launch.xml \
+ros2 launch autoware_zed_converter converter_node.launch.xml \
+  node_name:=my_converter \
   input_topic:=/zed/zed_node/obj_det/objects \
   output_topic:=/perception/object_recognition/objects
 ```
 
-### Multi-Camera Setup (Default)
-```bash
-ros2 launch autoware_zed autoware_zed.launch.xml
-```
+**Launch Arguments:**
+- `node_name`: Name of the converter node (default: "autoware_zed_converter")
+- `input_topic`: Input topic with ZED objects (default: "/zed/zed_node/obj_det/objects")
+- `output_topic`: Output topic for Autoware objects (default: "/perception/object_recognition/objects")
+- `use_sim_time`: Use simulation clock (default: false)
+- `use_tracking_velocity`: Use tracking velocity from ZED (default: true)
+- `existence_probability_threshold`: Minimum existence probability threshold (default: 0.5)
 
-This will create two transformer nodes:
-- Front camera: `/zed_multi/zed_front/obj_det/objects` → `/perception/object_recognition/objects/front`
-- Back camera: `/zed_multi/zed_back/obj_det/objects` → `/perception/object_recognition/objects/back`
+### Example Launch Files
+For complete examples that include launching ZED cameras, see the `autoware_zed_launch` package:
+- Single camera example: `ros2 launch autoware_zed_launch single_camera_example.launch.xml`
+- Multi-camera example: `ros2 launch autoware_zed_launch multi_camera_example.launch.xml`
 
 ### Running the Node Directly
 ```bash
-ros2 run autoware_zed autoware_zed_node
+ros2 run autoware_zed_converter autoware_zed_converter_node
 ```
 
 ## Parameters
 
 - `input_topic` (string): Input topic with ZED objects
 - `output_topic` (string): Output topic for Autoware objects
-- `target_frame` (string, default: "base_link"): Target frame for transformed objects
 - `use_tracking_velocity` (bool, default: true): Use velocity from ZED tracking
 - `existence_probability_threshold` (double, default: 0.5): Minimum confidence threshold
 
