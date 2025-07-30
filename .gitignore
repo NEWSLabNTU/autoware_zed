@@ -1,0 +1,14 @@
+# editor
+*~
+.*~
+*.sw[op]
+\#*#
+
+# Python
+*.py[oc]
+__pycache__/
+
+# colcon
+/build/
+/install/
+/log/
