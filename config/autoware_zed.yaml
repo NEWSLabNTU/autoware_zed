@@ -1,0 +1,17 @@
+/**:
+  ros__parameters:
+    # Input topic from ZED camera
+    input_topic: "/zed/zed_node/obj_det/objects"
+    
+    # Output topic for Autoware
+    output_topic: "/perception/object_recognition/objects"
+    
+    # Target frame for transformed objects
+    target_frame: "base_link"
+    
+    # Use tracking velocity from ZED if available
+    use_tracking_velocity: true
+    
+    # Minimum confidence threshold (0.0 - 1.0)
+    # ZED confidence is 0-100, this is converted to 0.0-1.0
+    existence_probability_threshold: 0.5
