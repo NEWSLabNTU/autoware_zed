@@ -15,7 +15,7 @@ graph LR
     B -->|/zed/zed_node/obj_det/objects| C[Autoware ZED Converter]
     C -->|/perception/object_recognition/objects| D[Autoware Perception]
 
-    style C fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#4a7c7e,stroke:#333,stroke-width:2px,color:#fff
 ```
 
 ### Multi-Camera Setup
@@ -30,8 +30,8 @@ graph LR
     C1 -->|/perception/object_recognition/objects/front| D[Autoware Perception]
     C2 -->|/perception/object_recognition/objects/back| D
 
-    style C1 fill:#f9f,stroke:#333,stroke-width:2px
-    style C2 fill:#f9f,stroke:#333,stroke-width:2px
+    style C1 fill:#4a7c7e,stroke:#333,stroke-width:2px,color:#fff
+    style C2 fill:#4a7c7e,stroke:#333,stroke-width:2px,color:#fff
 ```
 
 ## Prerequisites
@@ -95,7 +95,7 @@ ros2 launch autoware_zed_converter converter_node.launch.xml \
 
 Key parameters for the converter node:
 - `input_topic`: ZED objects topic
-- `output_topic`: Autoware objects topic  
+- `output_topic`: Autoware objects topic
 - `use_tracking_velocity`: Enable velocity from ZED tracking (default: true)
 - `existence_probability_threshold`: Minimum confidence threshold (default: 0.5)
 
