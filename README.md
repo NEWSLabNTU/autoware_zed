@@ -8,15 +8,30 @@ This repository provides converters and launch files to integrate ZED cameras wi
 
 ## Architecture
 
+### Single Camera Setup
 ```mermaid
 graph LR
     A[ZED Camera] -->|zed_msgs/ObjectsStamped| B[ZED ROS2 Wrapper]
     B -->|/zed/zed_node/obj_det/objects| C[Autoware ZED Converter]
-    C -->|autoware_perception_msgs/DetectedObjects| D[Autoware Perception]
+    C -->|/perception/object_recognition/objects| D[Autoware Perception]
 
-    E[Multiple ZED Cameras] -->|Multi-camera setup| F[ZED Multi-Camera]
-    F -->|/zed_front/obj_det/objects<br>/zed_back/obj_det/objects| C
-    C -->|/perception/object_recognition/objects/front<br>/perception/object_recognition/objects/back| D
+    style C fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Multi-Camera Setup
+```mermaid
+graph LR
+    A1[ZED Front Camera] -->|zed_msgs/ObjectsStamped| B1[ZED ROS2 Wrapper<br>Front]
+    A2[ZED Back Camera] -->|zed_msgs/ObjectsStamped| B2[ZED ROS2 Wrapper<br>Back]
+
+    B1 -->|/zed_front/zed_node_front/obj_det/objects| C1[Autoware ZED Converter<br>Front]
+    B2 -->|/zed_back/zed_node_back/obj_det/objects| C2[Autoware ZED Converter<br>Back]
+
+    C1 -->|/perception/object_recognition/objects/front| D[Autoware Perception]
+    C2 -->|/perception/object_recognition/objects/back| D
+
+    style C1 fill:#f9f,stroke:#333,stroke-width:2px
+    style C2 fill:#f9f,stroke:#333,stroke-width:2px
 ```
 
 ## Prerequisites
