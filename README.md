@@ -6,11 +6,24 @@ ROS2 packages for converting ZED camera object detection messages to Autoware pe
 
 This repository provides converters and launch files to integrate ZED cameras with Autoware. It transforms ZED object detection messages (`zed_msgs/msg/ObjectsStamped`) to Autoware perception messages (`autoware_perception_msgs/msg/DetectedObjects`).
 
+## Architecture
+
+```mermaid
+graph LR
+    A[ZED Camera] -->|zed_msgs/ObjectsStamped| B[ZED ROS2 Wrapper]
+    B -->|/zed/zed_node/obj_det/objects| C[Autoware ZED Converter]
+    C -->|autoware_perception_msgs/DetectedObjects| D[Autoware Perception]
+
+    E[Multiple ZED Cameras] -->|Multi-camera setup| F[ZED Multi-Camera]
+    F -->|/zed_front/obj_det/objects<br>/zed_back/obj_det/objects| C
+    C -->|/perception/object_recognition/objects/front<br>/perception/object_recognition/objects/back| D
+```
+
 ## Prerequisites
 
 - ROS2 (tested with Humble)
+- Autoware 0.45.1 built and sourced
 - ZED ROS2 packages built and sourced
-- Autoware perception messages
 
 ## Installation
 
