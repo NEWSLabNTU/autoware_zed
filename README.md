@@ -11,7 +11,7 @@ This repository provides converters and launch files to integrate ZED cameras wi
 ### Single Camera Setup
 ```mermaid
 graph LR
-    A[ZED Camera] -->|zed_msgs/ObjectsStamped| B[ZED ROS2 Wrapper]
+    A[ZED Camera] -->|GMSL data| B[ZED ROS2 Wrapper]
     B -->|/zed/zed_node/obj_det/objects| C[Autoware ZED Converter]
     C -->|/perception/object_recognition/objects| D[Autoware Perception]
 
@@ -21,8 +21,8 @@ graph LR
 ### Multi-Camera Setup
 ```mermaid
 graph LR
-    A1[ZED Front Camera] -->|zed_msgs/ObjectsStamped| B1[ZED ROS2 Wrapper<br>Front]
-    A2[ZED Back Camera] -->|zed_msgs/ObjectsStamped| B2[ZED ROS2 Wrapper<br>Back]
+    A1[ZED Front Camera] -->|GMSL data| B1[ZED ROS2 Wrapper<br>Front]
+    A2[ZED Back Camera] -->|GMSL data| B2[ZED ROS2 Wrapper<br>Back]
 
     B1 -->|/zed_front/zed_node_front/obj_det/objects| C1[Autoware ZED Converter<br>Front]
     B2 -->|/zed_back/zed_node_back/obj_det/objects| C2[Autoware ZED Converter<br>Back]
